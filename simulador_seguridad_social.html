@@ -325,6 +325,75 @@
 
         .enunciado { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 15px; margin-bottom: 20px; font-size: 14px; color: #78350f; border-radius: 0 8px 8px 0; line-height: 1.5; }
 
+        .case-header {
+            max-width: 900px;
+            margin: 0 auto 16px;
+            background: #fff7ed;
+            border-left: 4px solid #f59e0b;
+            padding: 16px;
+            color: #78350f;
+            line-height: 1.5;
+        }
+        .case-header strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #92400e;
+            letter-spacing: 0.02em;
+        }
+        .case-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            border-bottom: 1px solid var(--border);
+            background: #f8fafc;
+        }
+        .case-box {
+            padding: 12px;
+            border-right: 1px solid var(--border);
+        }
+        .case-box:last-child { border-right: none; }
+        .case-label {
+            display: block;
+            color: #64748b;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        .case-value {
+            color: #0f172a;
+            font-weight: 800;
+            font-size: 15px;
+        }
+        .rule-strip {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            background: #ecfdf5;
+            color: #166534;
+            font-size: 12px;
+            line-height: 1.45;
+        }
+        .result-positive { color: #16a34a; }
+        .result-warning { color: #b91c1c; }
+        .official-note {
+            padding: 12px 14px;
+            background: #f8fafc;
+            border-top: 1px solid #cbd5e1;
+            color: #475569;
+            font-size: 12px;
+            line-height: 1.45;
+        }
+        .status-pill {
+            display: inline-block;
+            border-radius: 999px;
+            padding: 3px 8px;
+            font-size: 11px;
+            font-weight: 800;
+            background: #e0f2fe;
+            color: #075985;
+            margin-top: 5px;
+        }
+
         /* CALCULADORA MI NÓMINA */
         #calcControls { display: none; flex-direction: column; gap: 10px; margin-bottom: 12px; }
         #calcControls.visible { display: flex; }
@@ -530,6 +599,12 @@
             }
             .calc-grid { grid-template-columns: 1fr; }
             .calc-summary { grid-template-columns: 1fr; }
+            .case-grid { grid-template-columns: 1fr; }
+            .case-box {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+            .case-box:last-child { border-bottom: none; }
             #view-nomina_calc .n-header { grid-template-columns: 1fr; }
             #view-nomina_calc .n-box {
                 border-right: none;
@@ -1020,13 +1095,30 @@
         </div>
 
         <div id="view-it_comun" class="modulo-view">
-            <div class="enunciado">
-                <strong>CASO PRÁCTICO: ENFERMEDAD COMÚN</strong><br>
-                Baja de 28 días. BCCC mes anterior: 2.100€.<br>
-                *Requisito: 180 días cotizados en últimos 5 años.
+            <div class="case-header">
+                <strong>CASO PRÁCTICO: ENFERMEDAD COMÚN</strong>
+                Baja de 28 días por enfermedad no laboral. La base de contingencias comunes del mes anterior es de 2.100,00 €.
             </div>
             <div class="doc-oficial">
-                <div class="doc-title">EXPEDIENTE INSS: I.T. COMÚN</div>
+                <div class="doc-title">EXPEDIENTE INSS · INCAPACIDAD TEMPORAL COMÚN</div>
+                <div class="case-grid">
+                    <div class="case-box">
+                        <span class="case-label">Contingencia</span>
+                        <span class="case-value">Enfermedad común</span>
+                        <span class="status-pill">Requiere carencia</span>
+                    </div>
+                    <div class="case-box">
+                        <span class="case-label">Duración de la baja</span>
+                        <span class="case-value">28 días</span>
+                    </div>
+                    <div class="case-box">
+                        <span class="case-label">Base mes anterior</span>
+                        <span class="case-value">2.100,00 €</span>
+                    </div>
+                </div>
+                <div class="rule-strip">
+                    Requisito general: 180 días cotizados dentro de los 5 años anteriores. Los 3 primeros días no generan prestación.
+                </div>
                 
                 <div class="highlight" id="itc-brd" style="padding: 15px; text-align: center; border-bottom: 2px solid var(--border);">
                     Base Reguladora Diaria (BRD): BCCC / 30<br>
@@ -1061,17 +1153,37 @@
                 <div class="liquido-box highlight" id="itc-liq">
                     TOTAL PRESTACIÓN I.T.: <span class="val" style="color:#16a34a;" id="vi-liq">1.134,00 €</span>
                 </div>
+                <div class="official-note">
+                    En una nómina real puede haber mejoras de convenio o complementos de empresa. Este caso muestra la regla legal base para estudiar.
+                </div>
             </div>
         </div>
 
         <div id="view-it_prof" class="modulo-view">
-            <div class="enunciado">
-                <strong>CASO PRÁCTICO: ACCIDENTE LABORAL</strong><br>
-                Baja de 15 días. BCCP mes anterior: 1.800€.<br>
-                *No requiere carencia previa.
+            <div class="case-header">
+                <strong>CASO PRÁCTICO: ACCIDENTE LABORAL</strong>
+                Baja de 15 días derivada de accidente de trabajo. La base de contingencias profesionales del mes anterior es de 1.800,00 €.
             </div>
             <div class="doc-oficial">
-                <div class="doc-title">EXPEDIENTE MUTUA: A.T.</div>
+                <div class="doc-title">EXPEDIENTE MUTUA · CONTINGENCIA PROFESIONAL</div>
+                <div class="case-grid">
+                    <div class="case-box">
+                        <span class="case-label">Contingencia</span>
+                        <span class="case-value">Accidente laboral</span>
+                        <span class="status-pill">Sin carencia</span>
+                    </div>
+                    <div class="case-box">
+                        <span class="case-label">Duración de la baja</span>
+                        <span class="case-value">15 días</span>
+                    </div>
+                    <div class="case-box">
+                        <span class="case-label">Base mes anterior</span>
+                        <span class="case-value">1.800,00 €</span>
+                    </div>
+                </div>
+                <div class="rule-strip">
+                    En contingencias profesionales se aplica el 75% de la base reguladora desde el día siguiente al de la baja.
+                </div>
                 
                 <div class="highlight" id="itp-brd" style="padding: 15px; text-align: center; border-bottom: 2px solid var(--border);">
                     Base Reguladora Diaria (BRD): BCCP / 30<br>
@@ -1094,17 +1206,36 @@
                 <div class="liquido-box highlight" id="itp-liq">
                     TOTAL PRESTACIÓN MUTUA: <span class="val" style="color:#16a34a;" id="vp-liq">675,00 €</span>
                 </div>
+                <div class="official-note">
+                    El día del accidente suele abonarlo la empresa como salario. El simulador se centra en la prestación calculada sobre la BRD.
+                </div>
             </div>
         </div>
 
         <div id="view-desempleo" class="modulo-view">
-            <div class="enunciado">
-                <strong>CASO PRÁCTICO: EL PARO</strong><br>
-                5 años cotizados. Base Reguladora: 2.500€.<br>
-                1 hijo a cargo (Tope IPREM: 1.400€).
+            <div class="case-header">
+                <strong>CASO PRÁCTICO: PRESTACIÓN POR DESEMPLEO</strong>
+                Persona con 5 años cotizados, base reguladora mensual de 2.500,00 € y 1 hijo a cargo.
             </div>
             <div class="doc-oficial">
-                <div class="doc-title">RESOLUCIÓN SEPE</div>
+                <div class="doc-title">RESOLUCIÓN SEPE · PRESTACIÓN CONTRIBUTIVA</div>
+                <div class="case-grid">
+                    <div class="case-box">
+                        <span class="case-label">Periodo cotizado</span>
+                        <span class="case-value">60 meses</span>
+                    </div>
+                    <div class="case-box">
+                        <span class="case-label">Base reguladora</span>
+                        <span class="case-value">2.500,00 €</span>
+                    </div>
+                    <div class="case-box">
+                        <span class="case-label">Cargas familiares</span>
+                        <span class="case-value">1 hijo</span>
+                    </div>
+                </div>
+                <div class="rule-strip">
+                    Primero se calcula la cuantía teórica y después se aplican topes mínimos y máximos según IPREM y cargas familiares.
+                </div>
                 <div class="table-responsive">
                     <table class="n-table" style="margin-bottom: 10px;">
                         <tbody>
@@ -1136,16 +1267,36 @@
                 <div class="highlight" id="d-warn" style="padding:15px; background:#fffbeb; font-size:13px; border-top:1px solid #fcd34d;">
                     <span class="val" id="vd-warn"><strong>* LÍMITE IPREM:</strong> Con 1 hijo, el tope es 1.400€. Aunque el cálculo teórico sea mayor, nunca cobrará más del tope.</span>
                 </div>
+                <div class="official-note">
+                    Los topes cambian con el IPREM y la normativa anual. Aquí se usa una cifra redonda para entender el mecanismo del límite.
+                </div>
             </div>
         </div>
 
         <div id="view-incapacidad" class="modulo-view">
-            <div class="enunciado">
-                <strong>TABLA DE ESTUDIO: GRADOS EVI</strong><br>
-                Clasificación de lesiones definitivas.
+            <div class="case-header">
+                <strong>GUÍA DE ESTUDIO: INCAPACIDAD PERMANENTE</strong>
+                Comparativa de grados reconocidos por el EVI cuando quedan limitaciones definitivas para trabajar.
             </div>
             <div class="doc-oficial">
-                <div class="doc-title">TRIBUNAL MÉDICO (EVI)</div>
+                <div class="doc-title">TRIBUNAL MÉDICO (EVI) · GRADOS DE INCAPACIDAD</div>
+                <div class="case-grid">
+                    <div class="case-box">
+                        <span class="case-label">Qué se valora</span>
+                        <span class="case-value">Capacidad laboral</span>
+                    </div>
+                    <div class="case-box">
+                        <span class="case-label">Efecto</span>
+                        <span class="case-value">Indemnización o pensión</span>
+                    </div>
+                    <div class="case-box">
+                        <span class="case-label">Clave de examen</span>
+                        <span class="case-value">Trabajo habitual vs todo trabajo</span>
+                    </div>
+                </div>
+                <div class="rule-strip">
+                    Parcial no impide el trabajo habitual. Total impide el trabajo habitual. Absoluta impide todo trabajo. Gran invalidez añade necesidad de ayuda.
+                </div>
                 <div class="table-responsive">
                     <table class="n-table">
                         <thead><tr><th>Grado</th><th>Requisito Médico</th><th>Prestación</th></tr></thead>
@@ -1172,6 +1323,9 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+                <div class="official-note">
+                    La cuantía final depende de la base reguladora, edad, causa de la incapacidad y requisitos de cotización. Esta tabla resume la diferencia conceptual entre grados.
                 </div>
             </div>
         </div>
@@ -1230,25 +1384,25 @@
                 }
             ],
             it_comun: [
-                { title: "IT Común: Base", desc: "Para enfermedad común (gripe), hallamos el valor del día: BCCC (2100) / 30.", hl: ['itc-brd'], vals: ['vi-brd'] },
-                { title: "Días 1 al 3", desc: "<span class='alert'>REGLA:</span> Los 3 primeros días de baja común <strong>NO SE COBRAN</strong>.", hl: ['itc-t1'], vals: ['vi-c1','vi-t1'] },
-                { title: "Días 4 al 20", desc: "Desde el día 4 cobras el <strong>60%</strong> de tu base diaria.", hl: ['itc-t2'], vals: ['vi-c2','vi-t2'] },
-                { title: "Día 21 en adelante", desc: "Del día 21 en adelante cobras el <strong>75%</strong>.", hl: ['itc-t3','itc-liq'], vals: ['vi-c3','vi-t3','vi-liq'] }
+                { title: "IT común: base diaria", desc: "<p>Primero se convierte la BCCC mensual en base diaria.</p><p><strong>2.100 ÷ 30 = 70,00 €/día</strong>.</p>", hl: ['itc-brd'], vals: ['vi-brd'] },
+                { title: "Tramo sin prestación", desc: "<span class='alert'>REGLA:</span> En enfermedad común, los días 1 a 3 no generan prestación legal.", hl: ['itc-t1'], vals: ['vi-c1','vi-t1'] },
+                { title: "Tramo del 60%", desc: "<p>Del día 4 al 20 se cobra el <strong>60%</strong> de la base diaria.</p><p>70 × 60% × 17 días = <strong>714,00 €</strong>.</p>", hl: ['itc-t2'], vals: ['vi-c2','vi-t2'] },
+                { title: "Tramo del 75%", desc: "<p>Desde el día 21 se cobra el <strong>75%</strong>.</p><p>Total del expediente: <strong>1.134,00 €</strong>.</p>", hl: ['itc-t3','itc-liq'], vals: ['vi-c3','vi-t3','vi-liq'] }
             ],
             it_prof: [
-                { title: "IT Profesional: Base", desc: "En accidente laboral, usamos la <strong>BCCP</strong>. 1800/30 para saber el valor diario.", hl: ['itp-brd'], vals: ['vp-brd'] },
-                { title: "La Regla del 75%", desc: "<span class='alert'>REGLA:</span> En Accidente NO hay días sin cobrar ni 60%. Cobras el <strong>75% directo</strong>.", hl: ['itp-t1','itp-liq'], vals: ['vp-c1','vp-t1','vp-liq'] }
+                { title: "IT profesional: base diaria", desc: "<p>En accidente laboral se parte de la <strong>BCCP</strong>.</p><p>1.800 ÷ 30 = <strong>60,00 €/día</strong>.</p>", hl: ['itp-brd'], vals: ['vp-brd'] },
+                { title: "Regla del 75%", desc: "<span class='alert'>REGLA:</span> En contingencia profesional no hay tramo al 0% ni al 60%: se aplica el <strong>75%</strong> sobre la base diaria.", hl: ['itp-t1','itp-liq'], vals: ['vp-c1','vp-t1','vp-liq'] }
             ],
             desempleo: [
-                { title: "Desempleo: El Tiempo", desc: "Regla: 1 mes de paro por cada 3 meses trabajados. 60 meses / 3 = 20 meses de paro.", hl: ['d-time'], vals: ['vd-time'] },
-                { title: "Desempleo: Cuantía", desc: "Cobras el <strong>70%</strong> los primeros 6 meses. Después baja al <strong>60%</strong>.", hl: ['d-t1','d-t2'], vals: ['vd-c1','vd-c2'] },
-                { title: "Desempleo: Topes", desc: "<span class='alert'>¡OJO TOPES!</span> Con 1 hijo, el tope es 1.400€. Aunque el cálculo sea superior, te cortan en 1.400€.", hl: ['d-t1','d-t2','d-warn'], vals: ['vd-r1','vd-r2','vd-warn'] }
+                { title: "Desempleo: duración", desc: "<p>Con 60 meses cotizados, el simulador muestra una prestación de <strong>20 meses</strong>.</p><p>Primero se resuelve el tiempo y después la cuantía.</p>", hl: ['d-time'], vals: ['vd-time'] },
+                { title: "Cuantía teórica", desc: "<p>La prestación se calcula por tramos:</p><ul><li>Primeros 6 meses: <strong>70%</strong></li><li>Después: <strong>60%</strong></li></ul>", hl: ['d-t1','d-t2'], vals: ['vd-c1','vd-c2'] },
+                { title: "Aplicar topes", desc: "<span class='alert'>OJO TOPES</span> Aunque la cuantía teórica sea mayor, la prestación real queda limitada por el máximo aplicable.", hl: ['d-t1','d-t2','d-warn'], vals: ['vd-r1','vd-r2','vd-warn'] }
             ],
             incapacidad: [
-                { title: "Incapacidad PARCIAL", desc: "Menos del 33%. Indemnización a tanto alzado (Pago único).", hl: ['ip-1'], vals: ['vip-1'] },
-                { title: "Incapacidad TOTAL", desc: "No puedes hacer tu trabajo, pero sí otro. <strong>55%</strong> vitalicio.", hl: ['ip-2'], vals: ['vip-2'] },
-                { title: "Incapacidad ABSOLUTA", desc: "Inhabilita para TODO trabajo. <strong>100%</strong> vitalicio.", hl: ['ip-3'], vals: ['vip-3'] },
-                { title: "GRAN INVALIDEZ", desc: "El 100% + un dinero extra para pagar a tu <strong>cuidador</strong>.", hl: ['ip-4'], vals: ['vip-4'] }
+                { title: "Incapacidad parcial", desc: "<p>Hay una disminución relevante, pero la persona puede seguir haciendo las tareas fundamentales de su profesión.</p>", hl: ['ip-1'], vals: ['vip-1'] },
+                { title: "Incapacidad total", desc: "<p>Impide la profesión habitual, pero no todo trabajo.</p><p>La idea clave es: <strong>no ese oficio, sí otro compatible</strong>.</p>", hl: ['ip-2'], vals: ['vip-2'] },
+                { title: "Incapacidad absoluta", desc: "<p>Impide cualquier profesión u oficio.</p><p>Por eso la prestación sube al <strong>100%</strong>.</p>", hl: ['ip-3'], vals: ['vip-3'] },
+                { title: "Gran invalidez", desc: "<p>Además de no poder trabajar, la persona necesita ayuda para actos esenciales de la vida diaria.</p>", hl: ['ip-4'], vals: ['vip-4'] }
             ]
         };
 
