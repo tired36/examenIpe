@@ -280,6 +280,113 @@
 
         .enunciado { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 15px; margin-bottom: 20px; font-size: 14px; color: #78350f; border-radius: 0 8px 8px 0; line-height: 1.5; }
 
+        /* CALCULADORA MI NÓMINA */
+        #calcControls { display: none; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+        #calcControls.visible { display: flex; }
+        #tutorialControls.hidden { display: none; }
+
+        .calc-field label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 4px;
+        }
+        .calc-field input, .calc-field select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+        .calc-field input:focus, .calc-field select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .calc-check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #475569;
+            margin-top: 4px;
+        }
+        .calc-check input { width: auto; }
+        .btn-calc {
+            background: #16a34a;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 4px;
+        }
+        .btn-calc:hover { background: #15803d; }
+        .btn-guide {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+        .calc-hint {
+            font-size: 12px;
+            color: #64748b;
+            background: #f1f5f9;
+            padding: 10px;
+            border-radius: 8px;
+            line-height: 1.4;
+            margin-top: 8px;
+        }
+        .calc-result-pill {
+            background: #dcfce7;
+            color: #166534;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 800;
+            text-align: center;
+            font-size: 18px;
+            margin-top: 8px;
+            display: none;
+        }
+        .calc-result-pill.visible { display: block; }
+
+        #view-nomina_calc .nomina-doc .val { opacity: 1; }
+        #view-nomina_calc .calc-input-header {
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: inherit;
+            width: 100%;
+            padding: 2px 0;
+        }
+        #view-nomina_calc .calc-input-header:focus {
+            outline: 2px solid var(--primary);
+            border-radius: 4px;
+        }
+        .formula-box {
+            background: #eff6ff;
+            border: 1px solid #93c5fd;
+            border-radius: 8px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #1e40af;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
         /* ==========================================
            DISEÑO RESPONSIVO (MÓVILES Y TABLETS)
            ========================================== */
@@ -348,33 +455,342 @@
                 font-size: 15px;
                 text-align: left;
             }
-            #view-nomina table.n-table {
+            #view-nomina table.n-table,
+            #view-nomina_calc table.n-table {
                 min-width: 480px;
             }
+            .calc-grid { grid-template-columns: 1fr; }
+            #view-nomina_calc .n-header { grid-template-columns: 1fr; }
+            #view-nomina_calc .n-box {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+            #view-nomina_calc .n-totals { grid-template-columns: 1fr; }
+            #view-nomina_calc .n-totals .total-box {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                text-align: left;
+            }
+            #view-nomina_calc .liquido-box { text-align: left; font-size: 15px; }
         }
+
+        /* Estilos compartidos nómina calc */
+        #view-nomina_calc .nomina-doc {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            border: 1px solid var(--border);
+            font-family: 'Arial', sans-serif;
+            font-size: 12px;
+            color: black;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        #view-nomina_calc .n-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-bottom: 1px solid var(--border);
+        }
+        #view-nomina_calc .n-box {
+            border-right: 1px solid var(--border);
+            padding: 8px;
+        }
+        #view-nomina_calc .n-box:last-child { border-right: none; }
+        #view-nomina_calc .n-title { font-weight: bold; margin-bottom: 5px; font-size: 11px; }
+        #view-nomina_calc .n-body-title {
+            text-align: center;
+            font-weight: bold;
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+            background: #f1f5f9;
+            letter-spacing: 1px;
+        }
+        #view-nomina_calc table.n-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 520px;
+        }
+        #view-nomina_calc table.n-table th,
+        #view-nomina_calc table.n-table td {
+            border-bottom: 1px dotted #cbd5e1;
+            border-right: 1px solid var(--border);
+            padding: 6px 10px;
+        }
+        #view-nomina_calc table.n-table th {
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+            background: #f8fafc;
+        }
+        #view-nomina_calc .n-totals {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        #view-nomina_calc .n-totals .total-box {
+            padding: 10px;
+            text-align: right;
+            font-weight: bold;
+            font-size: 14px;
+            border-right: 1px solid var(--border);
+        }
+        #view-nomina_calc .n-totals .total-box:last-child { border-right: none; }
+        #view-nomina_calc .liquido-box {
+            padding: 15px;
+            text-align: right;
+            font-size: 16px;
+            font-weight: bold;
+            background: #e2e8f0;
+            border-bottom: 1px solid var(--border);
+        }
+        #view-nomina_calc .n-bases { padding: 10px; font-size: 11px; }
+        #view-nomina_calc .n-bases table { width: 100%; border-collapse: collapse; min-width: 400px; }
+        #view-nomina_calc .base-val {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #1e3a8a;
+        }
+
+        .ded-base-tag {
+            display: block;
+            font-size: 10px;
+            font-weight: 700;
+            margin-top: 5px;
+            line-height: 1.35;
+            letter-spacing: 0.02em;
+        }
+        .ded-base-tag.tag-bccc { color: #1e3a8a; background: #eff6ff; padding: 3px 6px; border-radius: 4px; }
+        .ded-base-tag.tag-bccp { color: #5b21b6; background: #f5f3ff; padding: 3px 6px; border-radius: 4px; }
+        .ded-base-tag.tag-dev { color: #166534; background: #ecfdf5; padding: 3px 6px; border-radius: 4px; }
+        .ded-base-tag.tag-he { color: #c2410c; background: #fff7ed; padding: 3px 6px; border-radius: 4px; }
+        .ded-pct-cell { font-weight: bold; font-size: 12px; }
     </style>
 </head>
 <body>
 
     <div class="tutorial-panel">
         <div class="menu-modulos">
-            <button class="btn-menu active" onclick="loadModule('nomina', this)">1. Nómina</button>
-            <button class="btn-menu" onclick="loadModule('it_comun', this)">2. IT Común</button>
-            <button class="btn-menu" onclick="loadModule('it_prof', this)">3. IT Laboral</button>
-            <button class="btn-menu" onclick="loadModule('desempleo', this)">4. Desempleo</button>
-            <button class="btn-menu" onclick="loadModule('incapacidad', this)">5. EVI Grados</button>
+            <button class="btn-menu active" onclick="loadModule('nomina_calc', this)">✏️ Mi Nómina</button>
+            <button class="btn-menu" onclick="loadModule('nomina', this)">📘 Tutorial</button>
+            <button class="btn-menu" onclick="loadModule('it_comun', this)">IT Común</button>
+            <button class="btn-menu" onclick="loadModule('it_prof', this)">IT Laboral</button>
+            <button class="btn-menu" onclick="loadModule('desempleo', this)">Desempleo</button>
+            <button class="btn-menu" onclick="loadModule('incapacidad', this)">EVI</button>
         </div>
 
-        <div class="step-counter" id="stepCounter">Paso 0 de X</div>
-        <h2 class="step-title" id="stepTitle">Título</h2>
-        <div class="step-description" id="stepDesc">Descripción...</div>
-        <button class="btn-next" id="btnNext" onclick="nextStep()">Comenzar</button>
-        <button class="btn-reset" id="btnReset" onclick="resetTutorial()">Reiniciar todo</button>
+        <div id="calcControls">
+            <p style="margin:0 0 8px;font-size:13px;color:#64748b;">Introduce tus datos y la nómina se calcula sola. Luego usa la guía para entender cada paso.</p>
+            <div class="calc-field">
+                <label>Trabajador/a</label>
+                <input type="text" id="in-trabajador" value="Tu nombre" oninput="recalcNomina()">
+            </div>
+            <div class="calc-field">
+                <label>Empresa</label>
+                <input type="text" id="in-empresa" value="Mi empresa S.L." oninput="recalcNomina()">
+            </div>
+            <div class="calc-grid">
+                <div class="calc-field">
+                    <label>Salario base (€/mes)</label>
+                    <input type="number" id="in-salario" value="1500" min="0" step="0.01" oninput="recalcNomina()">
+                </div>
+                <div class="calc-field">
+                    <label>Pluses (€)</label>
+                    <input type="number" id="in-plus" value="100" min="0" step="0.01" oninput="recalcNomina()">
+                </div>
+                <div class="calc-field">
+                    <label>Horas extra (€)</label>
+                    <input type="number" id="in-he" value="80" min="0" step="0.01" oninput="recalcNomina()">
+                </div>
+                <div class="calc-field">
+                    <label>IRPF en nómina (%)</label>
+                    <input type="number" id="in-irpf" value="10" min="0" max="50" step="0.1" oninput="recalcNomina()">
+                </div>
+                <div class="calc-field">
+                    <label>Pagas <strong>prorrateadas</strong> (cobro mensual)</label>
+                    <select id="in-pagas-prorrateadas" onchange="recalcNomina()">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2" selected>2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+                <div class="calc-field">
+                    <label>Pagas <strong>no prorrateadas</strong> (solo cotización)</label>
+                    <select id="in-pagas-no-prorrateadas" onchange="recalcNomina()">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+            </div>
+            <p class="calc-hint" style="margin-top:0;">
+                Cada paga extra = salario base. <strong>Prorrateadas</strong> entran en devengos y BCCC.
+                <strong>No prorrateadas</strong> solo suben la BCCC (prorrata fantasma), no el bolsillo ni el total devengado.
+            </p>
+            <button type="button" class="btn-calc" onclick="recalcNomina()">🔄 Recalcular ahora</button>
+            <button type="button" class="btn-guide" onclick="startCalcGuide()">📋 Guía paso a paso con mis datos</button>
+            <div class="calc-result-pill" id="calcLiquidoPill">Líquido: — €</div>
+            <div class="calc-hint" id="calcLiveHint">Los cambios se aplican al instante en la nómina de la derecha.</div>
+        </div>
+
+        <div id="tutorialControls">
+            <div class="step-counter" id="stepCounter">Paso 0 de X</div>
+            <h2 class="step-title" id="stepTitle">Título</h2>
+            <div class="step-description" id="stepDesc">Descripción...</div>
+            <div class="formula-box" id="formulaBox" style="display:none;"></div>
+            <button class="btn-next" id="btnNext" onclick="nextStep()">Comenzar</button>
+            <button class="btn-reset" id="btnReset" onclick="resetTutorial()">Reiniciar todo</button>
+        </div>
     </div>
 
     <div class="nomina-wrapper">
+
+        <div id="view-nomina_calc" class="modulo-view active">
+            <div class="enunciado">
+                <strong>TU NÓMINA PERSONAL</strong> — Escribe tus importes a la izquierda. El recibo se rellena y calcula automáticamente (BCCC, deducciones, líquido).
+            </div>
+            <div class="nomina-doc">
+                <div class="n-header highlight" id="c-sec-header">
+                    <div class="n-box">
+                        <div class="n-title">Empresa:</div>
+                        <div><span id="c-out-empresa">Mi empresa S.L.</span></div>
+                    </div>
+                    <div class="n-box">
+                        <div class="n-title">Trabajador:</div>
+                        <div><span id="c-out-trabajador">Tu nombre</span> · Grupo 05</div>
+                    </div>
+                </div>
+                <div class="n-body-title">RECIBO INDIVIDUAL DE SALARIOS</div>
+                <div class="table-responsive">
+                    <table class="n-table">
+                        <thead>
+                            <tr>
+                                <th width="50%">CONCEPTO</th>
+                                <th width="18%">% · BASE</th>
+                                <th width="14%">DEVENGOS</th>
+                                <th width="18%">DEDUCCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="c-sec-devengos-title" class="highlight">
+                                <td colspan="4" style="font-weight:bold;background:#f8fafc;">I. DEVENGOS</td>
+                            </tr>
+                            <tr id="c-sec-dev-1" class="highlight">
+                                <td>Salario Base</td>
+                                <td class="text-center">30 días</td>
+                                <td class="text-right"><span class="val" id="c-val-salario">—</span></td>
+                                <td></td>
+                            </tr>
+                            <tr id="c-sec-dev-2" class="highlight">
+                                <td>Pluses / complementos</td>
+                                <td class="text-center"></td>
+                                <td class="text-right"><span class="val" id="c-val-plus">—</span></td>
+                                <td></td>
+                            </tr>
+                            <tr id="c-sec-dev-pagas-pror" class="highlight">
+                                <td id="c-label-dev-pagas-pror">Prorrata pagas extra (cobro mensual)</td>
+                                <td class="text-center" id="c-cant-pagas-pror"></td>
+                                <td class="text-right"><span class="val" id="c-val-pagas-pror">—</span></td>
+                                <td></td>
+                            </tr>
+                            <tr id="c-sec-dev-3" class="highlight">
+                                <td>Horas Extraordinarias</td>
+                                <td class="text-center"></td>
+                                <td class="text-right"><span class="val" id="c-val-extras">—</span></td>
+                                <td></td>
+                            </tr>
+                            <tr id="c-sec-deduc-title" class="highlight">
+                                <td colspan="4" style="font-weight:bold;background:#f8fafc;border-top:1px solid #1e293b;">II. DEDUCCIONES</td>
+                            </tr>
+                            <tr id="c-sec-deduc-1" class="highlight">
+                                <td>Contingencias Comunes</td>
+                                <td class="text-center ded-pct-cell" id="c-pct-cc">—</td>
+                                <td></td>
+                                <td class="text-right"><span class="val" id="c-val-ded-cc">—</span></td>
+                            </tr>
+                            <tr id="c-sec-deduc-2" class="highlight">
+                                <td>Desempleo</td>
+                                <td class="text-center ded-pct-cell" id="c-pct-des">—</td>
+                                <td></td>
+                                <td class="text-right"><span class="val" id="c-val-ded-des">—</span></td>
+                            </tr>
+                            <tr id="c-sec-deduc-3" class="highlight">
+                                <td>Formación Profesional</td>
+                                <td class="text-center ded-pct-cell" id="c-pct-fp">—</td>
+                                <td></td>
+                                <td class="text-right"><span class="val" id="c-val-ded-fp">—</span></td>
+                            </tr>
+                            <tr id="c-sec-deduc-4" class="highlight">
+                                <td>Horas Extraordinarias</td>
+                                <td class="text-center ded-pct-cell" id="c-pct-he">—</td>
+                                <td></td>
+                                <td class="text-right"><span class="val" id="c-val-ded-he">—</span></td>
+                            </tr>
+                            <tr id="c-sec-deduc-5" class="highlight">
+                                <td>Mecanismo de Equidad (MEI)</td>
+                                <td class="text-center ded-pct-cell" id="c-pct-mei">—</td>
+                                <td></td>
+                                <td class="text-right"><span class="val" id="c-val-ded-mei">—</span></td>
+                            </tr>
+                            <tr id="c-sec-deduc-irpf" class="highlight">
+                                <td>I.R.P.F.</td>
+                                <td class="text-center ded-pct-cell" id="c-pct-irpf">—</td>
+                                <td></td>
+                                <td class="text-right"><span class="val" id="c-val-ded-irpf">—</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="n-totals">
+                    <div class="total-box highlight" id="c-sec-tot-dev">
+                        TOTAL DEVENGADO: <span class="val" id="c-val-tot-dev">—</span>
+                    </div>
+                    <div class="total-box highlight" id="c-sec-tot-ded">
+                        TOTAL A DEDUCIR: <span class="val" id="c-val-tot-ded">—</span>
+                    </div>
+                </div>
+                <div class="liquido-box highlight" id="c-sec-liquido">
+                    LÍQUIDO TOTAL A PERCIBIR: <span class="val" style="color:#16a34a;" id="c-val-liquido">—</span>
+                </div>
+                <div class="n-body-title" style="margin-top:10px;">DETERMINACIÓN DE LAS BASES DE COTIZACIÓN</div>
+                <div class="n-bases highlight" id="c-sec-bases">
+                    <div class="table-responsive">
+                        <table>
+                            <tr><td width="70%"><strong>1. Contingencias Comunes</strong></td><td></td></tr>
+                            <tr>
+                                <td>Remuneración mensual (base + pluses):</td>
+                                <td class="text-right"><span class="val base-val" id="c-val-b-rem">—</span></td>
+                            </tr>
+                            <tr id="c-row-b-pro-real">
+                                <td id="c-label-prorrata-real">Prorrata pagas prorrateadas (ya en devengos):</td>
+                                <td class="text-right"><span class="val base-val" id="c-val-b-pro-real">—</span></td>
+                            </tr>
+                            <tr id="c-row-b-pro-fantasma" style="background:#fff7ed;">
+                                <td id="c-label-prorrata-fantasma">Prorrata fantasma (solo cotización, no devengo):</td>
+                                <td class="text-right"><span class="val base-val" id="c-val-b-pro-fantasma" style="color:#c2410c;">—</span></td>
+                            </tr>
+                            <tr class="highlight" id="c-sec-bccc">
+                                <td><strong>TOTAL B.C.C.C.</strong></td>
+                                <td class="text-right"><span class="val base-val" id="c-val-bccc">—</span></td>
+                            </tr>
+                            <tr><td colspan="2"><hr style="border:0;border-top:1px dotted #ccc;"></td></tr>
+                            <tr class="highlight" id="c-sec-bccp">
+                                <td><strong>2. B.C.C.P. (BCCC + horas extra)</strong></td>
+                                <td class="text-right"><span class="val base-val" id="c-val-bccp">—</span></td>
+                            </tr>
+                            <tr><td colspan="2"><hr style="border:0;border-top:1px dotted #ccc;"></td></tr>
+                            <tr class="highlight" id="c-sec-base-irpf">
+                                <td><strong>4. Base sujeta a I.R.P.F.</strong></td>
+                                <td class="text-right"><span class="val base-val" id="c-val-base-irpf">—</span></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
         
-        <div id="view-nomina" class="modulo-view active">
+        <div id="view-nomina" class="modulo-view">
             <div class="nomina-doc">
                 <div class="n-header highlight" id="sec-header">
                     <div class="n-box">
@@ -430,37 +846,37 @@
                             </tr>
                             <tr id="sec-deduc-1" class="highlight">
                                 <td>Contingencias Comunes</td>
-                                <td class="text-center">4,70 %</td>
+                                <td class="text-center ded-pct-cell">4,70 %<span class="ded-base-tag tag-bccc">× BCCC<br>1.850,00 €</span></td>
                                 <td></td>
                                 <td class="text-right"><span class="val" id="val-ded-cc">86,95</span></td>
                             </tr>
                             <tr id="sec-deduc-2" class="highlight">
                                 <td>Desempleo</td>
-                                <td class="text-center">1,55 %</td>
+                                <td class="text-center ded-pct-cell">1,55 %<span class="ded-base-tag tag-bccp">× BCCP<br>1.930,00 €</span></td>
                                 <td></td>
                                 <td class="text-right"><span class="val" id="val-ded-des">29,91</span></td>
                             </tr>
                             <tr id="sec-deduc-3" class="highlight">
                                 <td>Formación Profesional</td>
-                                <td class="text-center">0,10 %</td>
+                                <td class="text-center ded-pct-cell">0,10 %<span class="ded-base-tag tag-bccp">× BCCP<br>1.930,00 €</span></td>
                                 <td></td>
                                 <td class="text-right"><span class="val" id="val-ded-fp">1,93</span></td>
                             </tr>
                             <tr id="sec-deduc-4" class="highlight">
                                 <td>Horas Extraordinarias</td>
-                                <td class="text-center">4,70 %</td>
+                                <td class="text-center ded-pct-cell">4,70 %<span class="ded-base-tag tag-he">× Importe HE<br>80,00 €</span></td>
                                 <td></td>
                                 <td class="text-right"><span class="val" id="val-ded-he">3,76</span></td>
                             </tr>
                             <tr id="sec-deduc-5" class="highlight">
                                 <td>Mecanismo de Equidad (MEI)</td>
-                                <td class="text-center">0,15 %</td>
+                                <td class="text-center ded-pct-cell">0,15 %<span class="ded-base-tag tag-bccc">× BCCC<br>1.850,00 €</span></td>
                                 <td></td>
                                 <td class="text-right"><span class="val" id="val-ded-mei">2,77</span></td>
                             </tr>
                             <tr id="sec-deduc-irpf" class="highlight">
                                 <td>I.R.P.F.</td>
-                                <td class="text-center">10,00 %</td>
+                                <td class="text-center ded-pct-cell">10,00 %<span class="ded-base-tag tag-dev">× Total devengado<br>1.680,00 €</span></td>
                                 <td></td>
                                 <td class="text-right"><span class="val" id="val-ded-irpf">168,00</span></td>
                             </tr>
@@ -754,8 +1170,328 @@
             ]
         };
 
-        let currentModule = 'nomina';
+        let currentModule = 'nomina_calc';
         let currentStep = -1;
+        let calcGuideMode = false;
+        let calcGuideStep = 0;
+
+        const RATES = { cc: 0.047, des: 0.0155, fp: 0.001, he: 0.047, mei: 0.0015 };
+
+        function fmt(n) {
+            return n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function fmtEur(n) {
+            return fmt(n) + ' €';
+        }
+
+        function num(id) {
+            const v = parseFloat(document.getElementById(id).value);
+            return isNaN(v) ? 0 : Math.max(0, v);
+        }
+
+        function setText(id, text) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = text;
+        }
+
+        /** Celda deducción: % + base sobre la que se multiplica */
+        function setDedPctBase(cellId, pct, tagClass, baseLabel, baseAmount) {
+            const el = document.getElementById(cellId);
+            if (!el) return;
+            const pctStr = pct.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' %';
+            const amtLine = baseAmount !== null && baseAmount !== undefined
+                ? `<br>${fmt(baseAmount)} €`
+                : '';
+            el.innerHTML = `${pctStr}<span class="ded-base-tag ${tagClass}">× ${baseLabel}${amtLine}</span>`;
+        }
+
+        function intVal(id) {
+            const v = parseInt(document.getElementById(id).value, 10);
+            return isNaN(v) ? 0 : Math.max(0, v);
+        }
+
+        /**
+         * Motor de cálculo de nómina (reglas RRHH España).
+         * Cada paga extra = salario_base.
+         */
+        function calcularNomina(input) {
+            const salario_base = Math.max(0, Number(input.salario_base) || 0);
+            const pluses_salariales = Math.max(0, Number(input.pluses_salariales) || 0);
+            const horas_extras = Math.max(0, Number(input.horas_extras) || 0);
+            const num_pagas_prorrateadas = Math.max(0, parseInt(input.num_pagas_prorrateadas, 10) || 0);
+            const num_pagas_no_prorrateadas = Math.max(0, parseInt(input.num_pagas_no_prorrateadas, 10) || 0);
+            const irpf_porcentaje = Math.max(0, Number(input.irpf_porcentaje) || 0);
+
+            const importe_prorrateado_mensual = (salario_base * num_pagas_prorrateadas) / 12;
+            const importe_prorrata_fantasma = (salario_base * num_pagas_no_prorrateadas) / 12;
+
+            const totalDevengado = salario_base + pluses_salariales + horas_extras + importe_prorrateado_mensual;
+            const bccc = salario_base + pluses_salariales + importe_prorrateado_mensual + importe_prorrata_fantasma;
+            const bccp = bccc + horas_extras;
+
+            const dedCC = bccc * RATES.cc;
+            const dedDes = bccp * RATES.des;
+            const dedFP = bccp * RATES.fp;
+            const dedHE = horas_extras * RATES.he;
+            const dedMEI = bccc * RATES.mei;
+            const dedIRPF = totalDevengado * (irpf_porcentaje / 100);
+            const totalDeducciones = dedCC + dedDes + dedFP + dedHE + dedMEI + dedIRPF;
+            const liquido = totalDevengado - totalDeducciones;
+
+            return {
+                salario_base,
+                pluses_salariales,
+                horas_extras,
+                num_pagas_prorrateadas,
+                num_pagas_no_prorrateadas,
+                irpf_porcentaje,
+                importe_prorrateado_mensual,
+                importe_prorrata_fantasma,
+                remuneracion_mensual: salario_base + pluses_salariales,
+                totalDevengado,
+                bccc,
+                bccp,
+                baseIRPF: totalDevengado,
+                dedCC,
+                dedDes,
+                dedFP,
+                dedHE,
+                dedMEI,
+                dedIRPF,
+                totalDeducciones,
+                liquido
+            };
+        }
+
+        function getCalcData() {
+            return calcularNomina({
+                salario_base: num('in-salario'),
+                pluses_salariales: num('in-plus'),
+                horas_extras: num('in-he'),
+                num_pagas_prorrateadas: intVal('in-pagas-prorrateadas'),
+                num_pagas_no_prorrateadas: intVal('in-pagas-no-prorrateadas'),
+                irpf_porcentaje: num('in-irpf')
+            });
+        }
+
+        function toggleRow(id, visible) {
+            const el = document.getElementById(id);
+            if (el) el.style.display = visible ? '' : 'none';
+        }
+
+        function recalcNomina() {
+            const d = getCalcData();
+            const sb = d.salario_base;
+
+            setText('c-out-empresa', document.getElementById('in-empresa').value || '—');
+            setText('c-out-trabajador', document.getElementById('in-trabajador').value || '—');
+
+            setText('c-val-salario', fmt(d.salario_base));
+            setText('c-val-plus', fmt(d.pluses_salariales));
+            setText('c-val-pagas-pror', fmt(d.importe_prorrateado_mensual));
+            setText('c-val-extras', fmt(d.horas_extras));
+            setText('c-val-tot-dev', fmtEur(d.totalDevengado));
+            setText('c-val-ded-cc', fmt(d.dedCC));
+            setText('c-val-ded-des', fmt(d.dedDes));
+            setText('c-val-ded-fp', fmt(d.dedFP));
+            setText('c-val-ded-he', fmt(d.horas_extras > 0 ? d.dedHE : 0));
+            setText('c-val-ded-mei', fmt(d.dedMEI));
+            setText('c-val-ded-irpf', fmt(d.dedIRPF));
+            setText('c-val-tot-ded', fmtEur(d.totalDeducciones));
+            setText('c-val-liquido', fmtEur(d.liquido));
+            setText('c-val-b-rem', fmt(d.remuneracion_mensual));
+            setText('c-val-b-pro-real', fmt(d.importe_prorrateado_mensual));
+            setText('c-val-b-pro-fantasma', fmt(d.importe_prorrata_fantasma));
+            setText('c-val-bccc', fmt(d.bccc));
+            setText('c-val-bccp', fmt(d.bccp));
+            setText('c-val-base-irpf', fmt(d.baseIRPF));
+
+            setDedPctBase('c-pct-cc', 4.7, 'tag-bccc', 'BCCC', d.bccc);
+            setDedPctBase('c-pct-des', 1.55, 'tag-bccp', 'BCCP', d.bccp);
+            setDedPctBase('c-pct-fp', 0.1, 'tag-bccp', 'BCCP', d.bccp);
+            setDedPctBase('c-pct-mei', 0.15, 'tag-bccc', 'BCCC', d.bccc);
+            if (d.horas_extras > 0) {
+                setDedPctBase('c-pct-he', 4.7, 'tag-he', 'Importe horas extra', d.horas_extras);
+            } else {
+                setDedPctBase('c-pct-he', 4.7, 'tag-he', 'Importe horas extra', 0);
+            }
+            setDedPctBase('c-pct-irpf', d.irpf_porcentaje, 'tag-dev', 'Total devengado', d.totalDevengado);
+
+            const hasPror = d.num_pagas_prorrateadas > 0;
+            const hasFant = d.num_pagas_no_prorrateadas > 0;
+            toggleRow('c-sec-dev-pagas-pror', hasPror);
+            toggleRow('c-row-b-pro-real', hasPror);
+            toggleRow('c-row-b-pro-fantasma', hasFant);
+
+            if (hasPror) {
+                setText('c-label-dev-pagas-pror',
+                    `Prorrata pagas prorrateadas (${d.num_pagas_prorrateadas} × base ÷ 12)`);
+                setText('c-cant-pagas-pror', `${d.num_pagas_prorrateadas} p. extra`);
+                setText('c-label-prorrata-real',
+                    `Prorrata real (${fmt(sb)} × ${d.num_pagas_prorrateadas} ÷ 12):`);
+            }
+            if (hasFant) {
+                setText('c-label-prorrata-fantasma',
+                    `Prorrata fantasma (${fmt(sb)} × ${d.num_pagas_no_prorrateadas} ÷ 12, no devengo):`);
+            }
+
+            document.getElementById('calcLiquidoPill').textContent = '💰 Líquido a percibir: ' + fmtEur(d.liquido);
+            document.getElementById('calcLiquidoPill').classList.add('visible');
+
+            let hint = 'Todo actualizado. Usa la <strong>guía paso a paso</strong> para el orden del examen.';
+            if (hasFant) {
+                hint = `<strong>Prorrata fantasma ${fmtEur(d.importe_prorrata_fantasma)}</strong> sube la BCCC pero <em>no</em> el total devengado ni tu IRPF.`;
+            } else if (hasPror) {
+                hint = `Pagas prorrateadas: <strong>${fmtEur(d.importe_prorrateado_mensual)}/mes</strong> sí entran en devengos y en la BCCC.`;
+            } else if (d.horas_extras === 0) {
+                hint = 'Sin horas extra → BCCP = BCCC.';
+            }
+            document.getElementById('calcLiveHint').innerHTML = hint;
+
+            if (calcGuideMode) applyCalcGuideStep();
+            return d;
+        }
+
+        function buildCalcGuideSteps() {
+            const d = getCalcData();
+            const sb = d.salario_base;
+            const prorFormula = `(${fmt(sb)} × ${d.num_pagas_prorrateadas}) ÷ 12 = ${fmtEur(d.importe_prorrateado_mensual)}`;
+            const fantFormula = `(${fmt(sb)} × ${d.num_pagas_no_prorrateadas}) ÷ 12 = ${fmtEur(d.importe_prorrata_fantasma)}`;
+
+            const devengosList = [
+                `<li>Salario base: <strong>${fmtEur(d.salario_base)}</strong></li>`,
+                `<li>Pluses: <strong>${fmtEur(d.pluses_salariales)}</strong></li>`
+            ];
+            if (d.importe_prorrateado_mensual > 0) {
+                devengosList.push(`<li>Pagas prorrateadas (mes): <strong>${fmtEur(d.importe_prorrateado_mensual)}</strong></li>`);
+            }
+            devengosList.push(`<li>Horas extra: <strong>${fmtEur(d.horas_extras)}</strong></li>`);
+            if (d.importe_prorrata_fantasma > 0) {
+                devengosList.push(`<li style="color:#c2410c;"><em>La prorrata fantasma NO va aquí</em> (${fmtEur(d.importe_prorrata_fantasma)} solo cotización)</li>`);
+            }
+
+            const devFormulaParts = [fmt(d.salario_base), fmt(d.pluses_salariales)];
+            if (d.importe_prorrateado_mensual > 0) devFormulaParts.push(fmt(d.importe_prorrateado_mensual));
+            devFormulaParts.push(fmt(d.horas_extras));
+            const devFormula = devFormulaParts.join(' + ') + ' = ' + fmtEur(d.totalDevengado);
+
+            const bcccParts = [fmt(d.salario_base), fmt(d.pluses_salariales)];
+            if (d.importe_prorrateado_mensual > 0) bcccParts.push(fmt(d.importe_prorrateado_mensual));
+            if (d.importe_prorrata_fantasma > 0) bcccParts.push(fmt(d.importe_prorrata_fantasma));
+            const bcccFormula = bcccParts.join(' + ') + ' = ' + fmtEur(d.bccc);
+
+            const hlDev = ['c-sec-devengos-title', 'c-sec-dev-1', 'c-sec-dev-2', 'c-sec-dev-3'];
+            if (d.importe_prorrateado_mensual > 0) hlDev.splice(3, 0, 'c-sec-dev-pagas-pror');
+
+            return [
+                {
+                    title: 'Paso 1: Devengos (dinero real del mes)',
+                    desc: `<p>Solo entra lo que cobras en el bolsillo:</p><ul>${devengosList.join('')}</ul>`,
+                    formula: devFormula,
+                    hl: hlDev,
+                    btn: 'Paso 2: Total devengado'
+                },
+                {
+                    title: 'Paso 2: Total devengado',
+                    desc: `<p><strong>Total devengado = ${fmtEur(d.totalDevengado)}</strong></p><p>El IRPF (${d.irpf_porcentaje}%) se calcula siempre sobre esta cifra, nunca sobre la BCCC ni la fantasma.</p>`,
+                    formula: devFormula,
+                    hl: ['c-sec-tot-dev'],
+                    btn: 'Paso 3: Pagas extra (dos tipos)'
+                },
+                {
+                    title: 'Paso 3: Prorrateadas vs no prorrateadas',
+                    desc: `<p><strong>Prorrateadas (${d.num_pagas_prorrateadas}):</strong> cobro mensual → ${prorFormula}. Van a devengos y BCCC.</p>` +
+                        (d.importe_prorrata_fantasma > 0
+                            ? `<p><strong>No prorrateadas (${d.num_pagas_no_prorrateadas}):</strong> prorrata fantasma → ${fantFormula}. Solo BCCC, <span class="alert">no suman al total devengado</span>.</p>`
+                            : `<p>No tienes pagas no prorrateadas → prorrata fantasma = 0 €.</p>`),
+                    formula: d.importe_prorrata_fantasma > 0 ? `Fantasma: ${fantFormula}` : `Prorrateo: ${prorFormula}`,
+                    hl: (() => {
+                        const h = ['c-sec-bases'];
+                        if (d.importe_prorrateado_mensual > 0) h.push('c-row-b-pro-real');
+                        if (d.importe_prorrata_fantasma > 0) h.push('c-row-b-pro-fantasma');
+                        return h;
+                    })(),
+                    btn: 'Paso 4: BCCC'
+                },
+                {
+                    title: 'Paso 4: BCCC (sin horas extra)',
+                    desc: `<p><strong>BCCC = ${fmtEur(d.bccc)}</strong></p><p>Base + pluses + prorrata real + prorrata fantasma. Las <em>horas extra no entran</em>.</p>`,
+                    formula: bcccFormula,
+                    hl: ['c-sec-bccc'],
+                    btn: 'Paso 5: BCCP e IRPF'
+                },
+                {
+                    title: 'Paso 5: BCCP y base IRPF',
+                    desc: `<p><strong>BCCP</strong> = BCCC + HE = ${fmtEur(d.bccc)} + ${fmt(d.horas_extras)} = <strong>${fmtEur(d.bccp)}</strong></p><p><strong>Base IRPF</strong> = Total devengado = <strong>${fmtEur(d.baseIRPF)}</strong></p>`,
+                    formula: `${fmt(d.bccc)} + ${fmt(d.horas_extras)} = ${fmtEur(d.bccp)}`,
+                    hl: ['c-sec-bccp', 'c-sec-base-irpf'],
+                    btn: 'Paso 6: Deducciones SS'
+                },
+                {
+                    title: 'Paso 6: Seguridad Social',
+                    desc: `<ul><li>CC 4,7% × BCCC = <strong>${fmtEur(d.dedCC)}</strong></li><li>Desempleo 1,55% × BCCP = <strong>${fmtEur(d.dedDes)}</strong></li><li>FP 0,1% × BCCP = <strong>${fmtEur(d.dedFP)}</strong></li><li>MEI 0,15% × BCCC = <strong>${fmtEur(d.dedMEI)}</strong></li><li>HE 4,7% × ${fmt(d.horas_extras)} = <strong>${fmtEur(d.dedHE)}</strong></li></ul>`,
+                    formula: `Cuota obrera SS = ${fmtEur(d.dedCC + d.dedDes + d.dedFP + d.dedMEI + d.dedHE)}`,
+                    hl: ['c-sec-deduc-title', 'c-sec-deduc-1', 'c-sec-deduc-2', 'c-sec-deduc-3', 'c-sec-deduc-4', 'c-sec-deduc-5'],
+                    btn: 'Paso 7: IRPF'
+                },
+                {
+                    title: 'Paso 7: IRPF y total a deducir',
+                    desc: `<p>IRPF: ${d.irpf_porcentaje}% × ${fmtEur(d.totalDevengado)} = <strong>${fmtEur(d.dedIRPF)}</strong></p><p>Total deducciones: <strong>${fmtEur(d.totalDeducciones)}</strong></p>`,
+                    formula: `${fmtEur(d.totalDevengado)} × ${d.irpf_porcentaje}% = ${fmtEur(d.dedIRPF)}`,
+                    hl: ['c-sec-deduc-irpf', 'c-sec-tot-ded'],
+                    btn: 'Paso 8: Líquido'
+                },
+                {
+                    title: 'Paso 8: Líquido a percibir',
+                    desc: `<p>${fmtEur(d.totalDevengado)} − ${fmtEur(d.totalDeducciones)} = <strong style="color:#16a34a;font-size:1.2em;">${fmtEur(d.liquido)}</strong></p>`,
+                    formula: 'Devengos − Deducciones = Líquido',
+                    hl: ['c-sec-liquido'],
+                    btn: 'Fin de la guía',
+                    hideBtn: true
+                }
+            ];
+        }
+
+        function showPanelMode(module) {
+            const isCalc = module === 'nomina_calc';
+            const isCalcGuide = isCalc && calcGuideMode;
+            document.getElementById('calcControls').classList.toggle('visible', isCalc && !isCalcGuide);
+            document.getElementById('tutorialControls').classList.toggle('hidden', isCalc && !isCalcGuide);
+            document.getElementById('formulaBox').style.display = isCalcGuide ? 'block' : 'none';
+        }
+
+        function applyCalcGuideStep() {
+            const steps = buildCalcGuideSteps();
+            const step = steps[calcGuideStep];
+            document.getElementById('stepCounter').innerText = `Guía ${calcGuideStep + 1} de ${steps.length}`;
+            document.getElementById('stepTitle').innerHTML = step.title;
+            document.getElementById('stepDesc').innerHTML = step.desc;
+            document.getElementById('formulaBox').innerHTML = '📐 ' + (step.formula || '');
+            document.getElementById('btnNext').innerText = step.btn || 'Siguiente';
+            document.getElementById('btnNext').style.display = step.hideBtn ? 'none' : 'block';
+
+            document.querySelectorAll('#view-nomina_calc .highlight').forEach(el => el.classList.remove('active'));
+            step.hl.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.classList.add('active');
+                if (window.innerWidth <= 850) {
+                    const y = el.getBoundingClientRect().top + window.scrollY - 200;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                } else {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+        }
+
+        window.startCalcGuide = function() {
+            recalcNomina();
+            calcGuideMode = true;
+            calcGuideStep = 0;
+            showPanelMode('nomina_calc');
+            applyCalcGuideStep();
+        };
 
         function applyStep(stepData, steps, stepIndex) {
             const view = document.getElementById('view-' + currentModule);
@@ -801,16 +1537,22 @@
 
             document.querySelectorAll('.modulo-view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.highlight').forEach(h => h.classList.remove('active'));
-            document.querySelectorAll('.val').forEach(v => v.classList.remove('visible'));
+            document.querySelectorAll('#view-nomina .val').forEach(v => v.classList.remove('visible'));
 
             document.getElementById('view-' + modName).classList.add('active');
 
             currentModule = modName;
-            currentStep = modName === 'nomina' ? 0 : -1;
+            calcGuideMode = false;
+            showPanelMode(modName);
 
-            if (modName === 'nomina') {
+            if (modName === 'nomina_calc') {
+                currentStep = 0;
+                recalcNomina();
+            } else if (modName === 'nomina') {
+                currentStep = 0;
                 applyStep(db.nomina[0], db.nomina, 0);
             } else {
+                currentStep = -1;
                 nextStep();
             }
 
@@ -821,6 +1563,15 @@
         }
 
         window.nextStep = function() {
+            if (currentModule === 'nomina_calc' && calcGuideMode) {
+                const steps = buildCalcGuideSteps();
+                if (calcGuideStep < steps.length - 1) {
+                    calcGuideStep++;
+                    applyCalcGuideStep();
+                }
+                return;
+            }
+
             const steps = db[currentModule];
 
             if (currentModule === 'nomina') {
@@ -842,9 +1593,14 @@
 
         window.resetTutorial = function() {
             document.querySelectorAll('.highlight').forEach(h => h.classList.remove('active'));
-            document.querySelectorAll('.val').forEach(v => v.classList.remove('visible'));
+            document.querySelectorAll('#view-nomina .val').forEach(v => v.classList.remove('visible'));
 
-            if (currentModule === 'nomina') {
+            if (currentModule === 'nomina_calc') {
+                calcGuideMode = false;
+                calcGuideStep = 0;
+                showPanelMode('nomina_calc');
+                recalcNomina();
+            } else if (currentModule === 'nomina') {
                 currentStep = 0;
                 applyStep(db.nomina[0], db.nomina, 0);
             } else {
@@ -857,9 +1613,9 @@
         }
 
         window.onload = () => {
-            currentModule = 'nomina';
-            currentStep = 0;
-            applyStep(db.nomina[0], db.nomina, 0);
+            currentModule = 'nomina_calc';
+            showPanelMode('nomina_calc');
+            recalcNomina();
         };
     </script>
 </body>
