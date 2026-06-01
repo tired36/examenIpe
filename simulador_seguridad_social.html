@@ -2,8 +2,9 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Simulador FOL Definitivo - Móvil y PC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Simulador educativo de nóminas, bases de cotización, deducciones, IT, desempleo e incapacidad para FOL/IPE.">
+    <title>Simulador de Nóminas FOL/IPE</title>
     <style>
         :root {
             --primary: #2563eb;
@@ -42,6 +43,42 @@
             z-index: 20;
         }
 
+        .app-kicker {
+            margin: 0 0 6px;
+            color: #2563eb;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .app-title {
+            margin: 0;
+            color: #0f172a;
+            font-size: 24px;
+            line-height: 1.12;
+        }
+
+        .app-subtitle {
+            margin: 8px 0 16px;
+            color: #475569;
+            font-size: 13px;
+            line-height: 1.45;
+        }
+
+        .notice {
+            border: 1px solid #bfdbfe;
+            background: #eff6ff;
+            color: #1e3a8a;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 12px;
+            line-height: 1.45;
+            margin-bottom: 14px;
+        }
+
+        .notice strong { color: #1e40af; }
+
         /* MENÚ DE MÓDULOS */
         .menu-modulos {
             display: flex;
@@ -62,6 +99,14 @@
             cursor: pointer;
             transition: all 0.2s;
             font-size: 14px;
+        }
+        .btn-menu:focus-visible,
+        .btn-next:focus-visible,
+        .btn-reset:focus-visible,
+        .btn-calc:focus-visible,
+        .btn-guide:focus-visible {
+            outline: 3px solid rgba(37, 99, 235, 0.35);
+            outline-offset: 2px;
         }
         .btn-menu:hover { background: #e2e8f0; }
         .btn-menu.active {
@@ -349,6 +394,30 @@
             line-height: 1.4;
             margin-top: 8px;
         }
+        .calc-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .calc-mini-card {
+            border: 1px solid #dbeafe;
+            background: #f8fbff;
+            border-radius: 8px;
+            padding: 9px;
+        }
+        .calc-mini-card span {
+            display: block;
+            color: #64748b;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+        .calc-mini-card strong {
+            display: block;
+            color: #0f172a;
+            font-size: 13px;
+        }
         .calc-result-pill {
             background: #dcfce7;
             color: #166534;
@@ -460,6 +529,7 @@
                 min-width: 480px;
             }
             .calc-grid { grid-template-columns: 1fr; }
+            .calc-summary { grid-template-columns: 1fr; }
             #view-nomina_calc .n-header { grid-template-columns: 1fr; }
             #view-nomina_calc .n-box {
                 border-right: none;
@@ -569,44 +639,51 @@
 <body>
 
     <div class="tutorial-panel">
-        <div class="menu-modulos">
-            <button class="btn-menu active" onclick="loadModule('nomina_calc', this)">✏️ Mi Nómina</button>
-            <button class="btn-menu" onclick="loadModule('nomina', this)">📘 Tutorial</button>
-            <button class="btn-menu" onclick="loadModule('it_comun', this)">IT Común</button>
-            <button class="btn-menu" onclick="loadModule('it_prof', this)">IT Laboral</button>
-            <button class="btn-menu" onclick="loadModule('desempleo', this)">Desempleo</button>
-            <button class="btn-menu" onclick="loadModule('incapacidad', this)">EVI</button>
+        <p class="app-kicker">FOL / IPE</p>
+        <h1 class="app-title">Simulador de nóminas</h1>
+        <p class="app-subtitle">Calcula una nómina de ejemplo, entiende las bases de cotización y repasa prestaciones habituales paso a paso.</p>
+        <div class="notice">
+            <strong>Uso educativo.</strong> Los porcentajes y fórmulas sirven para estudiar. Contrasta siempre con normativa vigente, convenio y datos reales antes de tomar decisiones laborales.
+        </div>
+
+        <div class="menu-modulos" aria-label="Módulos del simulador">
+            <button class="btn-menu active" onclick="loadModule('nomina_calc', this)" aria-pressed="true">✏️ Mi Nómina</button>
+            <button class="btn-menu" onclick="loadModule('nomina', this)" aria-pressed="false">📘 Tutorial</button>
+            <button class="btn-menu" onclick="loadModule('it_comun', this)" aria-pressed="false">IT Común</button>
+            <button class="btn-menu" onclick="loadModule('it_prof', this)" aria-pressed="false">IT Laboral</button>
+            <button class="btn-menu" onclick="loadModule('desempleo', this)" aria-pressed="false">Desempleo</button>
+            <button class="btn-menu" onclick="loadModule('incapacidad', this)" aria-pressed="false">EVI</button>
         </div>
 
         <div id="calcControls">
             <p style="margin:0 0 8px;font-size:13px;color:#64748b;">Introduce tus datos y la nómina se calcula sola. Luego usa la guía para entender cada paso.</p>
             <div class="calc-field">
-                <label>Trabajador/a</label>
+                <label for="in-trabajador">Trabajador/a</label>
                 <input type="text" id="in-trabajador" value="Tu nombre" oninput="recalcNomina()">
             </div>
             <div class="calc-field">
-                <label>Empresa</label>
+                <label for="in-empresa">Empresa</label>
                 <input type="text" id="in-empresa" value="Mi empresa S.L." oninput="recalcNomina()">
             </div>
             <div class="calc-grid">
                 <div class="calc-field">
-                    <label>Salario base (€/mes)</label>
-                    <input type="number" id="in-salario" value="1500" min="0" step="0.01" oninput="recalcNomina()">
+                    <label for="in-salario">Salario base (€/mes)</label>
+                    <input type="number" id="in-salario" value="1500" min="0" step="0.01" inputmode="decimal" oninput="recalcNomina()">
                 </div>
                 <div class="calc-field">
-                    <label>Pluses (€)</label>
-                    <input type="number" id="in-plus" value="100" min="0" step="0.01" oninput="recalcNomina()">
+                    <label for="in-plus">Pluses (€)</label>
+                    <input type="number" id="in-plus" value="100" min="0" step="0.01" inputmode="decimal" oninput="recalcNomina()">
                 </div>
                 <div class="calc-field">
-                    <label>Horas extra (€)</label>
-                    <input type="number" id="in-he" value="80" min="0" step="0.01" oninput="recalcNomina()">
+                    <label for="in-he">Horas extra (€)</label>
+                    <input type="number" id="in-he" value="80" min="0" step="0.01" inputmode="decimal" oninput="recalcNomina()">
                 </div>
                 <div class="calc-field">
-                    <label>IRPF en nómina (%)</label>
-                    <input type="number" id="in-irpf" value="10" min="0" max="50" step="0.1" oninput="recalcNomina()">
+                    <label for="in-irpf">IRPF en nómina (%)</label>
+                    <input type="number" id="in-irpf" value="10" min="0" max="50" step="0.1" inputmode="decimal" oninput="recalcNomina()">
                 </div>
                 <div class="calc-field">
-                    <label>Pagas <strong>prorrateadas</strong> (cobro mensual)</label>
+                    <label for="in-pagas-prorrateadas">Pagas <strong>prorrateadas</strong> (cobro mensual)</label>
                     <select id="in-pagas-prorrateadas" onchange="recalcNomina()">
                         <option value="0">0</option>
                         <option value="1">1</option>
@@ -615,7 +692,7 @@
                     </select>
                 </div>
                 <div class="calc-field">
-                    <label>Pagas <strong>no prorrateadas</strong> (solo cotización)</label>
+                    <label for="in-pagas-no-prorrateadas">Pagas <strong>no prorrateadas</strong> (solo cotización)</label>
                     <select id="in-pagas-no-prorrateadas" onchange="recalcNomina()">
                         <option value="0" selected>0</option>
                         <option value="1">1</option>
@@ -630,7 +707,12 @@
             </p>
             <button type="button" class="btn-calc" onclick="recalcNomina()">🔄 Recalcular ahora</button>
             <button type="button" class="btn-guide" onclick="startCalcGuide()">📋 Guía paso a paso con mis datos</button>
-            <div class="calc-result-pill" id="calcLiquidoPill">Líquido: — €</div>
+            <div class="calc-summary" aria-label="Resumen de cálculo">
+                <div class="calc-mini-card"><span>Bruto</span><strong id="sum-devengado">—</strong></div>
+                <div class="calc-mini-card"><span>Deducciones</span><strong id="sum-deducciones">—</strong></div>
+                <div class="calc-mini-card"><span>BCCC</span><strong id="sum-bccc">—</strong></div>
+            </div>
+            <div class="calc-result-pill" id="calcLiquidoPill" aria-live="polite">Líquido: — €</div>
             <div class="calc-hint" id="calcLiveHint">Los cambios se aplican al instante en la nómina de la derecha.</div>
         </div>
 
@@ -648,7 +730,7 @@
 
         <div id="view-nomina_calc" class="modulo-view active">
             <div class="enunciado">
-                <strong>TU NÓMINA PERSONAL</strong> — Escribe tus importes a la izquierda. El recibo se rellena y calcula automáticamente (BCCC, deducciones, líquido).
+                <strong>TU NÓMINA PERSONAL</strong> — Escribe tus importes a la izquierda. El recibo se rellena automáticamente y separa lo que cobras de lo que solo sirve para cotizar.
             </div>
             <div class="nomina-doc">
                 <div class="n-header highlight" id="c-sec-header">
@@ -1306,6 +1388,9 @@
             setText('c-val-bccc', fmt(d.bccc));
             setText('c-val-bccp', fmt(d.bccp));
             setText('c-val-base-irpf', fmt(d.baseIRPF));
+            setText('sum-devengado', fmtEur(d.totalDevengado));
+            setText('sum-deducciones', fmtEur(d.totalDeducciones));
+            setText('sum-bccc', fmtEur(d.bccc));
 
             setDedPctBase('c-pct-cc', 4.7, 'tag-bccc', 'BCCC', d.bccc);
             setDedPctBase('c-pct-des', 1.55, 'tag-bccp', 'BCCP', d.bccp);
@@ -1532,8 +1617,12 @@
         }
 
         window.loadModule = function(modName, btnElement) {
-            document.querySelectorAll('.btn-menu').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.btn-menu').forEach(b => {
+                b.classList.remove('active');
+                b.setAttribute('aria-pressed', 'false');
+            });
             btnElement.classList.add('active');
+            btnElement.setAttribute('aria-pressed', 'true');
 
             document.querySelectorAll('.modulo-view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.highlight').forEach(h => h.classList.remove('active'));
